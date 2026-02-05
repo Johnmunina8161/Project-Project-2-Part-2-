@@ -1,0 +1,181 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Student & Courses API",
+    "description": "API for managing students and courses with OAuth authentication",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-app-name.onrender.com"
+    },
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/students": {
+      "get": {
+        "summary": "Get all students",
+        "responses": {
+          "200": {
+            "description": "List of students"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a student (Protected)",
+        "responses": {
+          "201": {
+            "description": "Student created"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/students/{id}": {
+      "put": {
+        "summary": "Update a student (Protected)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Student updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a student (Protected)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Student deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/courses": {
+      "get": {
+        "summary": "Get all courses",
+        "responses": {
+          "200": {
+            "description": "List of courses"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a course",
+        "responses": {
+          "201": {
+            "description": "Course created"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/courses/{id}": {
+      "put": {
+        "summary": "Update a course",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Course updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a course",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Course deleted"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "summary": "Login with Google OAuth",
+        "responses": {
+          "302": {
+            "description": "Redirect to Google"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "summary": "Google OAuth callback",
+        "responses": {
+          "302": {
+            "description": "Redirect after login"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout user",
+        "responses": {
+          "200": {
+            "description": "Logged out"
+          }
+        }
+      }
+    }
+  }
+}
