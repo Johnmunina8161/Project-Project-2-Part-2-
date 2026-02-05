@@ -11,14 +11,18 @@ function ensureAuth(req, res, next) {
 }
 
 // Start GitHub login
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get(
+  '/github',
+  passport.authenticate('github', { scope: ['user:email'] })
+);
 
 // GitHub callback
 router.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('/');
+    // ✅ AFTER GitHub login → Swagger UI
+    res.redirect('/api-docs');
   }
 );
 
@@ -31,3 +35,4 @@ router.get('/logout', (req, res, next) => {
 });
 
 module.exports = { router, ensureAuth };
+
