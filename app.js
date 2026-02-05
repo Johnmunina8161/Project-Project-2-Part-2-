@@ -8,7 +8,7 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-// Passport config (GitHub strategy lives here)
+// Passport configuration
 require('./config/passport');
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'defaultsecret',
     resave: false,
     saveUninitialized: false
   })
@@ -43,7 +43,13 @@ app.use('/api/students', require('./routes/students'));
 app.use('/api/courses', require('./routes/courses'));
 app.use('/auth', require('./routes/auth'));
 
+// Swagger docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// ROOT ROUTE: redirect to Swagger
+app.get('/', (req, res) => {
+  res.redirect('/api-docs'); // This ensures / always opens Swagger
+});
 
 /* =====================
    DATABASE + SERVER
@@ -53,8 +59,6 @@ mongoose
   .then(() => {
     console.log('MongoDB connected');
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () =>
-      console.log(`Server running on port ${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch(err => console.error(err));
