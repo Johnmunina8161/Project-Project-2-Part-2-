@@ -56,7 +56,7 @@ app.use('/api/courses', require('./routes/courses'));
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-/* =====================
+/* ====================
    ROOT PAGE with login/logout + username
 ===================== */
 app.get('/', (req, res) => {
