@@ -7,10 +7,8 @@
   },
   "servers": [
     {
-      "url": "https://your-app-name.onrender.com"
-    },
-    {
-      "url": "http://localhost:3000"
+      "url": "/",
+      "description": "Current server (localhost or Render)"
     }
   ],
   "paths": {
@@ -19,22 +17,57 @@
         "summary": "Get all students",
         "responses": {
           "200": {
-            "description": "List of students"
+            "description": "List of students",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "students": {
+                    "value": [
+                      {
+                        "_id": "65a1f1a1a1a1a1a1a1a1a1a1",
+                        "name": "John Doe",
+                        "email": "john@example.com",
+                        "age": 20
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "summary": "Create a student (Protected)",
-        "responses": {
-          "201": {
-            "description": "Student created"
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "401": {
-            "description": "Unauthorized"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                  },
+                  "age": {
+                    "type": "integer",
+                    "example": 20
+                  }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "201": { "description": "Student created" },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" }
         }
       }
     },
@@ -46,21 +79,28 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Student updated"
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "401": {
-            "description": "Unauthorized"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "age": { "type": "integer" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": { "description": "Student updated" },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" }
         }
       },
       "delete": {
@@ -70,18 +110,12 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Student deleted"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
+          "200": { "description": "Student deleted" },
+          "401": { "description": "Unauthorized" }
         }
       }
     },
@@ -90,19 +124,56 @@
         "summary": "Get all courses",
         "responses": {
           "200": {
-            "description": "List of courses"
+            "description": "List of courses",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "courses": {
+                    "value": [
+                      {
+                        "_id": "65a2f2b2b2b2b2b2b2b2b2b2",
+                        "title": "Web Services",
+                        "code": "CSE341",
+                        "credits": 3
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "summary": "Create a course",
-        "responses": {
-          "201": {
-            "description": "Course created"
-          },
-          "400": {
-            "description": "Invalid input"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Web Services"
+                  },
+                  "code": {
+                    "type": "string",
+                    "example": "CSE341"
+                  },
+                  "credits": {
+                    "type": "integer",
+                    "example": 3
+                  }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "201": { "description": "Course created" },
+          "400": { "description": "Invalid input" }
         }
       }
     },
@@ -114,18 +185,27 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Course updated"
-          },
-          "400": {
-            "description": "Invalid input"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "code": { "type": "string" },
+                  "credits": { "type": "integer" }
+                }
+              }
+            }
           }
+        },
+        "responses": {
+          "200": { "description": "Course updated" },
+          "400": { "description": "Invalid input" }
         }
       },
       "delete": {
@@ -135,15 +215,11 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Course deleted"
-          }
+          "200": { "description": "Course deleted" }
         }
       }
     },
@@ -151,9 +227,7 @@
       "get": {
         "summary": "Login with Google OAuth",
         "responses": {
-          "302": {
-            "description": "Redirect to Google"
-          }
+          "302": { "description": "Redirect to Google OAuth" }
         }
       }
     },
@@ -161,9 +235,7 @@
       "get": {
         "summary": "Google OAuth callback",
         "responses": {
-          "302": {
-            "description": "Redirect after login"
-          }
+          "302": { "description": "Redirect after authentication" }
         }
       }
     },
@@ -171,9 +243,7 @@
       "get": {
         "summary": "Logout user",
         "responses": {
-          "200": {
-            "description": "Logged out"
-          }
+          "200": { "description": "User logged out" }
         }
       }
     }
