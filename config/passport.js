@@ -1,9 +1,9 @@
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
-// Serialize / deserialize user
+// Serialize only the minimal user info
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, { id: user.id, username: user.username });
 });
 
 passport.deserializeUser((user, done) => {
@@ -19,8 +19,10 @@ passport.use(
       callbackURL: process.env.CALLBACK_URL
     },
     (accessToken, refreshToken, profile, done) => {
-      // This is where you could save the user to your DB if needed
+      // Optional: save user to DB here if needed
       return done(null, profile);
     }
   )
 );
+
+module.exports = passport;
