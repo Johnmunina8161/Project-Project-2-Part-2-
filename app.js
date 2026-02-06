@@ -14,7 +14,7 @@ require('./config/passport');
 const app = express();
 
 /* ===================
-   MIDDLEWARE
+    MIDDLEWARE
 ===================== */
 app.use(express.json());
 
@@ -45,7 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /* =====================
-   ROUTES
+    ROUTES
 ===================== */
 const authRoutes = require('./routes/auth');
 app.use('/auth', authRoutes.router);
@@ -53,27 +53,20 @@ app.use('/auth', authRoutes.router);
 app.use('/api/students', require('./routes/students'));
 app.use('/api/courses', require('./routes/courses'));
 
-// Swagger
+// Swagger UI - Disponible sur /api-docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* ====================
-   ROOT PAGE with login/logout + username
+    ROOT REDIRECT
+    C'est ici que la magie opère : en tapant l'URL de base, 
+    l'utilisateur est envoyé vers Swagger.
 ===================== */
 app.get('/', (req, res) => {
-  const loggedIn = req.isAuthenticated();
-  const username = loggedIn ? req.user.username : '';
-  res.send(`
-    <h1>Student & Courses API</h1>
-    ${loggedIn 
-      ? `<p>Logged in as <strong>${username}</strong></p><a href="/auth/logout">Logout</a>` 
-      : '<a href="/auth/github">Login with GitHub</a>'}
-    <br/><br/>
-    <a href="/api-docs">Go to Swagger UI</a>
-  `);
+  res.redirect('/api-docs');
 });
 
 /* =====================
-   DATABASE + SERVER
+    DATABASE + SERVER
 ===================== */
 mongoose
   .connect(process.env.MONGO_URI)
