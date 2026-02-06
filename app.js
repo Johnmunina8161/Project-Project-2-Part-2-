@@ -53,13 +53,11 @@ app.use('/auth', authRoutes.router);
 app.use('/api/students', require('./routes/students'));
 app.use('/api/courses', require('./routes/courses'));
 
-// Swagger UI - Disponible sur /api-docs
+// Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /* ====================
     ROOT REDIRECT
-    C'est ici que la magie opère : en tapant l'URL de base, 
-    l'utilisateur est envoyé vers Swagger.
 ===================== */
 app.get('/', (req, res) => {
   res.redirect('/api-docs');

@@ -6,8 +6,8 @@ const StudentSchema = new mongoose.Schema({
   email: { type: String, required: true },
   age: { type: Number, required: true },
   major: { type: String, required: true },
-  enrollmentDate: { type: String, required: true }, // Correspond à ta capture
-  status: { type: String, required: true }         // Correspond à ta capture
+  enrollmentDate: { type: String, required: true }, // according to the capture
+  status: { type: String, required: true }         // according to the capture
 });
 
 module.exports = mongoose.model('Student', StudentSchema);

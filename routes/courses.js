@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/coursesController');
-const { ensureAuth } = require('./auth'); // import the middleware
+const { ensureAuth } = require('./auth'); // import middleware
 
 // Public route
 router.get('/', controller.getCourses);
