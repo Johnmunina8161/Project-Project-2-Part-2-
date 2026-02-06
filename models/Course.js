@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/coursesController'); // Ton contrôleur de cours
+const { ensureAuth } = require('./auth'); // Importe le middleware
 
-const CourseSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  code: { type: String, required: true },
-  credits: { type: Number, required: true }
-});
+// GET est public
+router.get('/', controller.getCourses);
 
-module.exports = mongoose.model('Course', CourseSchema);
+// POST est protégé (Critère 5)
+router.post('/', ensureAuth, controller.createCourse);
+
+module.exports = router;
