@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Student & Courses API",
-    "description": "API for managing students and courses with OAuth authentication",
+    "description": "API for managing students and courses with OAuth authentication. <br><br> <a href='/auth/github' style='display: inline-block; padding: 10px 20px; background-color: #24292e; color: white; border-radius: 5px; text-decoration: none; font-weight: bold;'>Log in with GitHub</a> <a href='/auth/logout' style='margin-left: 10px; color: #d73a49;'>Logout</a>",
     "version": "1.0.0"
   },
   "servers": [
@@ -20,18 +20,18 @@
             "description": "List of students",
             "content": {
               "application/json": {
-                "examples": {
-                  "students": {
-                    "value": [
-                      {
-                        "_id": "65a1f1a1a1a1a1a1a1a1a1a1",
-                        "name": "John Doe",
-                        "email": "john@example.com",
-                        "age": 20
-                      }
-                    ]
+                "example": [
+                  {
+                    "_id": "65a1f1a1a1a1a1a1a1a1a1a1",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "email": "john@example.com",
+                    "age": 20,
+                    "major": "Computer Science",
+                    "enrollmentDate": "2024-01-01",
+                    "status": "Active"
                   }
-                }
+                ]
               }
             }
           }
@@ -45,20 +45,15 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email"],
+                "required": ["firstName", "lastName", "email"],
                 "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "John Doe"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "john@example.com"
-                  },
-                  "age": {
-                    "type": "integer",
-                    "example": 20
-                  }
+                  "firstName": { "type": "string", "example": "John" },
+                  "lastName": { "type": "string", "example": "Doe" },
+                  "email": { "type": "string", "example": "john@example.com" },
+                  "age": { "type": "integer", "example": 20 },
+                  "major": { "type": "string", "example": "Web Development" },
+                  "enrollmentDate": { "type": "string", "example": "2026-02-05" },
+                  "status": { "type": "string", "example": "Active" }
                 }
               }
             }
@@ -66,22 +61,15 @@
         },
         "responses": {
           "201": { "description": "Student created" },
-          "400": { "description": "Invalid input" },
-          "401": { "description": "Unauthorized" }
+          "400": { "description": "Invalid input - Data validation failed" },
+          "401": { "description": "Unauthorized - Please login with GitHub" }
         }
       }
     },
     "/api/students/{id}": {
       "put": {
         "summary": "Update a student (Protected)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "requestBody": {
           "required": true,
           "content": {
@@ -89,9 +77,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
                   "email": { "type": "string" },
-                  "age": { "type": "integer" }
+                  "age": { "type": "integer" },
+                  "major": { "type": "string" },
+                  "enrollmentDate": { "type": "string" },
+                  "status": { "type": "string" }
                 }
               }
             }
@@ -99,20 +91,12 @@
         },
         "responses": {
           "200": { "description": "Student updated" },
-          "400": { "description": "Invalid input" },
           "401": { "description": "Unauthorized" }
         }
       },
       "delete": {
         "summary": "Delete a student (Protected)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": {
           "200": { "description": "Student deleted" },
           "401": { "description": "Unauthorized" }
@@ -123,29 +107,11 @@
       "get": {
         "summary": "Get all courses",
         "responses": {
-          "200": {
-            "description": "List of courses",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "courses": {
-                    "value": [
-                      {
-                        "_id": "65a2f2b2b2b2b2b2b2b2b2b2",
-                        "title": "Web Services",
-                        "code": "CSE341",
-                        "credits": 3
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
+          "200": { "description": "List of courses" }
         }
       },
       "post": {
-        "summary": "Create a course",
+        "summary": "Create a course (Protected)",
         "requestBody": {
           "required": true,
           "content": {
@@ -154,18 +120,9 @@
                 "type": "object",
                 "required": ["title"],
                 "properties": {
-                  "title": {
-                    "type": "string",
-                    "example": "Web Services"
-                  },
-                  "code": {
-                    "type": "string",
-                    "example": "CSE341"
-                  },
-                  "credits": {
-                    "type": "integer",
-                    "example": 3
-                  }
+                  "title": { "type": "string", "example": "Web Services" },
+                  "code": { "type": "string", "example": "CSE341" },
+                  "credits": { "type": "integer", "example": 3 }
                 }
               }
             }
@@ -173,78 +130,20 @@
         },
         "responses": {
           "201": { "description": "Course created" },
-          "400": { "description": "Invalid input" }
+          "401": { "description": "Unauthorized" }
         }
       }
     },
-    "/api/courses/{id}": {
-      "put": {
-        "summary": "Update a course",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "title": { "type": "string" },
-                  "code": { "type": "string" },
-                  "credits": { "type": "integer" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Course updated" },
-          "400": { "description": "Invalid input" }
-        }
-      },
-      "delete": {
-        "summary": "Delete a course",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Course deleted" }
-        }
-      }
-    },
-    "/auth/google": {
+    "/auth/github": {
       "get": {
-        "summary": "Login with Google OAuth",
-        "responses": {
-          "302": { "description": "Redirect to Google OAuth" }
-        }
-      }
-    },
-    "/auth/google/callback": {
-      "get": {
-        "summary": "Google OAuth callback",
-        "responses": {
-          "302": { "description": "Redirect after authentication" }
-        }
+        "summary": "Login with GitHub OAuth",
+        "responses": { "302": { "description": "Redirect to GitHub" } }
       }
     },
     "/auth/logout": {
       "get": {
         "summary": "Logout user",
-        "responses": {
-          "200": { "description": "User logged out" }
-        }
+        "responses": { "200": { "description": "User logged out" } }
       }
     }
   }
